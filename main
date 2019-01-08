@@ -1,0 +1,24 @@
+import re
+import urllib
+from heapq import nlargest
+search_word = 'hiding-places'
+file_path = 'http://www.gutenberg.org/files/84/84-0.txt'
+occurrances = {}
+file_data = urllib.urlopen(file_path)
+text_string = file_data.read().lower()
+search_pattern = re.findall(r'\b([a-z-]+)\b', text_string)
+
+for word in search_pattern:
+    count = occurrances.get(word,0)
+    occurrances[word] = count + 1
+
+top_three = nlargest(3, occurrances, key=occurrances.get)
+print 'Top 3 words:'
+
+for key in top_three:
+    value = str(occurrances[key])
+    print key + ' ' + value
+
+search_word = search_word.lower()
+print '\nSearched word:'
+print search_word, occurrances[search_word]
